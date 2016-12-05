@@ -1,0 +1,333 @@
+﻿
+@{
+    ViewBag.Title = "LineChart";
+}
+<!-- Morris.js charts -->
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<link href="~/Content/morris/morris.css" rel="stylesheet" />
+<script src="~/Content/morris/morris.js"></script>
+<script src="~/Content/morris/morris.min.js"></script>*@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            debugger;
+            //Load data here
+            var chartData=null;
+            $.ajax({
+                url: '/GoogleChart/GetSalesData',
+                type: 'GET',
+                dataType: 'json',
+                data: '',
+                success: function (d) {
+                    chartData = d;
+                },
+                error: function () {
+                    alert("Error !");
+                }
+            }).done(function () {
+                drawChart(chartData);
+            })
+
+
+            var chartData1 = null;
+            $.ajax({
+                url: '/GoogleChart/GetSalesData1',
+                type: 'GET',
+                dataType: 'json',
+                data1: '',
+                success: function (d1) {
+                    chartData1 = d1;
+                },
+                error: function () {
+                    alert("Error !");
+                }
+            }).done(function () {
+                drawChart1(chartData1);
+            })
+
+
+
+        });
+        //Draw chart
+        function drawChart(d) {
+            debugger;
+            var chartData = d;
+            var data = null;
+            data = google.visualization.arrayToDataTable(chartData);
+            
+            var view = new google.visualization.DataView(data);
+            view.setColumns([0, {
+                type: 'number',
+                label: data.getColumnLabel(0),
+                calc: function () {return 0;}
+            },
+            {
+                type: 'number',
+                label: data.getColumnLabel(1),
+                calc: function () { return 0; }
+            },
+            {
+                type: 'number',
+                label: data.getColumnLabel(2),
+                calc: function () { return 0; }
+            }
+            ]);
+
+
+       //,
+            //{
+            //    type: 'number',
+            //    label: data.getColumnLabel(2),
+            //    calc: function () { return 0; }
+            //}
+            
+
+
+
+
+
+         
+            var chart = new google.visualization.ColumnChart(document.getElementById('line-chart'));
+          //  var chart1 = new google.visualization.ColumnChart(document.getElementById('line-chart1'));
+            var options = {
+                title: 'Campaign Report',
+                legend: 'bottom',
+                hAxis: {
+                    title: 'Year',
+                    format:'#'
+                },
+                vAxis: {
+                    minValue: 0,
+                    mazValue:10000000,
+                title: 'Ammount'
+                },
+                chartArea: {
+                    left:100,top:50,width:'70%',height:'50%'
+                },
+                animation: {
+                    duration:1000
+                }
+            };
+            
+            var runFirstTime = google.visualization.events.addListener(chart, 'ready', function () {
+                google.visualization.events.removeListener(runFirstTime);
+                chart.draw(data, options);
+            });
+            chart.draw(view, options);
+
+          
+        };
+        function drawChart1(d1) {
+            debugger;
+            var chartData1 = d1;
+            var data1 = null;
+            data1 = google.visualization.arrayToDataTable(chartData1);
+
+            var view1 = new google.visualization.DataView(data1);
+            view1.setColumns([0, {
+                type: 'number',
+                label: data1.getColumnLabel(0),
+                calc: function () { return 0; }
+            },
+            {
+                type: 'number',
+                label: data1.getColumnLabel(1),
+                calc: function () { return 0; }
+            }
+            ]);
+            var chart1 = new google.visualization.ColumnChart(document.getElementById('line-chart1'));
+            var options = {
+                title: 'Campaign Report',
+                legend: 'bottom',
+                hAxis: {
+                    title: 'Year',
+                    format: '#'
+                },
+                vAxis: {
+                    minValue: 0,
+                    mazValue: 10000000,
+                    title: 'Ammount'
+                },
+                chartArea: {
+                    left: 100, top: 50, width: '70%', height: '50%'
+                },
+                animation: {
+                    duration: 1000
+                }
+            };
+            var runFirstTime1 = google.visualization.events.addListener(chart1, 'ready', function () {
+                google.visualization.events.removeListener(runFirstTime1);
+                chart1.draw(data1, options);
+            });
+            chart1.draw(view1, options);
+        };
+        //For Second View
+
+
+        //$(document).ready(function () {
+        //    debugger;
+        //    //second Code
+        //    var chartData1 = null;
+        //    $.ajax({
+        //        url: '/GoogleChart/GetSalesData1',
+        //        type: 'GET',
+        //        dataType: 'json',
+        //        data1: '',
+        //        success: function (d1) {
+        //            chartData1 = d1;
+        //        },
+        //        error: function () {
+        //            alert("Error !");
+        //        }
+        //    }).done(function () {
+        //        drawChart(chartData1);
+        //    })//End Here
+        //});
+        ////Draw chart
+        //function drawChart(d1) {
+        //    var chartData1 = d1;
+        //    var data1 = null;
+        //    data1 = google.visualization.arrayToDataTable(chartData1);
+
+        //    var view1 = new google.visualization.DataView(data1);
+        //    view1.setColumns([0, {
+        //        type: 'number',
+        //        label: data1.getColumnLabel(0),
+        //        calc: function () { return 0; }
+        //    },
+        //    {
+        //        type: 'number',
+        //        label: data1.getColumnLabel(1),
+        //        calc: function () { return 0; }
+        //    }
+
+        //    ]);
+        //    var chart1 = new google.visualization.ColumnChart(document.getElementById('line-chart1'));
+        //    var options = {
+        //        title: 'Campaign Report',
+        //        legend: 'bottom',
+        //        hAxis: {
+        //            title: 'Year',
+        //            format: '#'
+        //        },
+        //        vAxis: {
+        //            minValue: 0,
+        //            mazValue: 10000000,
+        //            title: 'Ammount'
+        //        },
+        //        chartArea: {
+        //            left: 100, top: 50, width: '70%', height: '50%'
+        //        },
+        //        animation: {
+        //            duration: 1000
+        //        }
+        //    };
+        //        //For Second Chart 
+
+        //    var runFirstTime1 = google.visualization.events.addListener(chart1, 'ready', function () {
+        //        google.visualization.events.removeListener(runFirstTime1);
+        //        chart1.draw(data1, options);
+        //    });
+        //    chart1.draw(view1, options);
+        
+
+            //End Second 
+           
+
+        //};
+        // End View
+
+    
+        google.load('visualization', "1", { packages: ['corechart'] })
+
+
+
+        //New Chart
+
+
+      
+</script>
+}
+<h2>LineChart</h2>
+
+
+@*<div class="box-body border-radius-none">*@
+    <div class="chart" id="line-chart" style="height: 250px;"></div>
+<div class="chart" id="line-chart1" style="height: 250px;"></div>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+@*<script>
+    $(document).ready(function () {
+        debugger;
+        //Load data here
+        var chartData = null;
+        $.ajax({
+            url: '/GoogleChart/GetSalesData',
+            type: 'GET',
+            dataType: 'json',
+            data: '',
+            success: function (d) {
+                chartData = d;
+            },
+            error: function () {
+                alert("Error !");
+            }
+        }).done(function () {
+            drawChart(chartData);
+        })
+    });
+    //Draw chart
+    function drawChart(d) {
+        var chartData = d;
+        var data = null;
+        data = google.visualization.arrayToDataTable(chartData);
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, {
+            type: 'number',
+            label: data.getColumnLabel(0),
+            calc: function () { return 0; }
+        },
+        {
+            type: 'number',
+            label: data.getColumnLabel(1),
+            calc: function () { return 0; }
+        },
+        {
+            type: 'number',
+            label: data.getColumnLabel(2),
+            calc: function () { return 0; }
+        }
+        ]);
+        var chart = new google.visualization.BarChart(document.getElementById('line-chart1'));
+        var options = {
+            title: 'Campaign Report',
+            legend: 'bottom',
+            hAxis: {
+                title: 'Year',
+                format: '#'
+            },
+            vAxis: {
+                minValue: 0,
+                mazValue: 10000000,
+                title: 'Ammount'
+            },
+            chartArea: {
+                left: 100, top: 50, width: '70%', height: '50%'
+            },
+            animation: {
+                duration: 1000
+            }
+        };
+        var runFirstTime = google.visualization.events.addListener(chart, 'ready', function () {
+            google.visualization.events.removeListener(runFirstTime);
+            chart.draw(data, options);
+        });
+        chart.draw(view, options);
+    };
+    google.load('visualization', "1", { packages: ['corechart'] })
+</script>*@
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+@*</div>*@
